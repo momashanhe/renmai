@@ -1,0 +1,22 @@
+/* 联系人列表 */
+
+.contact-avatar-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.contact-avatar-text {
+  width: 60px;
+  height: 60px;
+  font-weight: bold;
+  font-size: 1.4rem;
+}
+
+.search-input-max-width {
+  max-width: 300px;
+}
+
+.loading-container {
+  height: 200px;
+}

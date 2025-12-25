@@ -1,0 +1,12 @@
+/* 页脚样式 */
+
+footer {
+  flex-shrink: 0;
+  background-color: #f8f9fa !important;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

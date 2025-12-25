@@ -1,0 +1,47 @@
+/* 导航栏样式 */
+
+html {
+  overflow-y: scroll;
+}
+
+.navbar-brand {
+  font-weight: bold;
+}
+
+.nav-link {
+  transition: color 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+  color: #fff !important;
+}
+
+.dropdown-menu {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.message-container {
+  z-index: 1050;
+}
+
+/* 修复模态框居中问题开始 */
+.modal {
+  padding-right: 0 !important;
+}
+
+.modal-open {
+  padding-right: 0 !important;
+}
+
+.modal-dialog {
+  display: flex;
+  align-items: center;
+  min-height: calc(100% - 1rem);
+}
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    min-height: calc(100% - 3.5rem);
+  }
+}
+/* 修复模态框居中问题结束 */

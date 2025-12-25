@@ -1,0 +1,21 @@
+/* 联系人详情 */
+
+#avatarPreview {
+  cursor: default;
+  width: 100px;
+  height: 100px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#avatarPreview img {
+  width: 96px;
+  height: 96px;
+}
+
+#avatarPreview .fa-user {
+  color: #ccc;
+}
