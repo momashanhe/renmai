@@ -100,7 +100,7 @@ renmai/
 │   │       │   │       ├── bootstrap/        # Bootstrap脚本
 │   │       │   │       └── jquery/           # jQuery脚本
 │   │       │   └── template/                 # 模板文件
-│   │       │       └── 联系人模板.csv        # 联系人导入导出模板
+│   │       │       └── 联系人模板.csv          # 联系人导入导出模板
 │   │       ├── favicon.ico                   # 网站图标
 │   │       └── index.jsp                     # 首页
 │   └── test/                                 # 测试代码
