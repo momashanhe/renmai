@@ -2,7 +2,12 @@ package com.momashanhe.renmai.filter;
 
 import com.momashanhe.renmai.entity.User;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,16 +28,16 @@ public class LoginFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        
+
         // 获取会话
         HttpSession session = httpRequest.getSession(false);
-        
+
         // 检查用户是否已登录
         User user = (session != null) ? (User) session.getAttribute("user") : null;
-        
+
         if (user == null) {
             // 用户未登录，重定向到登录页面
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/view/user/login");

@@ -19,7 +19,8 @@ public class Contact {
     private Date updateTime;
 
     // 构造函数
-    public Contact() {}
+    public Contact() {
+    }
 
     public Contact(String name, String phone, String email, String address, String company, String position, String avatar, String remark) {
         this.name = name;

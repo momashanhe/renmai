@@ -16,13 +16,13 @@ import java.io.IOException;
 public class ContactController extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // 检查是否已登录，如果用户未登录，重定向到登录页面
         if (!BusinessUtil.requireLogin(request, response)) {
             return;
         }
-        
+
         switch (request.getPathInfo()) {
             case "/list":
                 request.getRequestDispatcher("/WEB-INF/views/contact/list.jsp").forward(request, response);

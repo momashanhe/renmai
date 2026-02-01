@@ -3,7 +3,10 @@ package com.momashanhe.renmai.dao;
 import com.momashanhe.renmai.entity.Contact;
 import com.momashanhe.renmai.util.DBUtil;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,9 +14,10 @@ import java.util.List;
  * 联系人数据访问对象
  */
 public class ContactDao {
-    
+
     /**
      * 根据ID查询联系人
+     *
      * @param id 联系人ID
      * @return 联系人对象
      */
@@ -22,11 +26,11 @@ public class ContactDao {
         String sql = "SELECT id, name, phone, email, address, company, position, avatar, remark, create_time, update_time FROM tbl_contact WHERE id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             contact = new Contact();
-            
+
             if (rs.next()) {
                 contact.setId(rs.getInt("id"));
                 contact.setName(rs.getString("name"));
@@ -45,9 +49,10 @@ public class ContactDao {
         }
         return contact;
     }
-    
+
     /**
      * 查询联系人列表
+     *
      * @return 联系人列表
      */
     public List<Contact> listAll() {
@@ -58,7 +63,7 @@ public class ContactDao {
 
             ResultSet rs = ps.executeQuery();
             contacts = new ArrayList<>();
-            
+
             while (rs.next()) {
                 Contact contact = new Contact();
                 contact.setId(rs.getInt("id"));
@@ -77,12 +82,13 @@ public class ContactDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
         return contacts;
     }
-    
+
     /**
      * 根据用户ID查询联系人列表
+     *
      * @param userId 用户ID
      * @return 联系人列表
      */
@@ -91,11 +97,11 @@ public class ContactDao {
         String sql = "SELECT id, name, phone, email, address, company, position, avatar, remark, create_time, update_time FROM tbl_contact WHERE user_id = ? ORDER BY create_time DESC";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
             contacts = new ArrayList<>();
-            
+
             while (rs.next()) {
                 Contact contact = new Contact();
                 contact.setId(rs.getInt("id"));
@@ -114,12 +120,13 @@ public class ContactDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
         return contacts;
     }
 
     /**
      * 根据关键词查询联系人列表
+     *
      * @param keyword 关键词
      * @return 联系人列表
      */
@@ -161,9 +168,10 @@ public class ContactDao {
 
         return contacts;
     }
-    
+
     /**
      * 创建联系人
+     *
      * @param contact 联系人对象
      * @return 是否创建成功
      */
@@ -171,7 +179,7 @@ public class ContactDao {
         String sql = "INSERT INTO tbl_contact (name, phone, email, address, company, position, avatar, remark) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+
             ps.setString(1, contact.getName());
             ps.setString(2, contact.getPhone());
             ps.setString(3, contact.getEmail());
@@ -188,9 +196,10 @@ public class ContactDao {
         }
         return false;
     }
-    
+
     /**
      * 更新联系人
+     *
      * @param contact 联系人对象
      * @return 是否更新成功
      */
@@ -198,7 +207,7 @@ public class ContactDao {
         String sql = "UPDATE tbl_contact SET name = ?, phone = ?, email = ?, address = ?, company = ?, position = ?, avatar = ?, remark = ?, update_time = NOW() WHERE id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+
             ps.setString(1, contact.getName());
             ps.setString(2, contact.getPhone());
             ps.setString(3, contact.getEmail());
@@ -208,7 +217,7 @@ public class ContactDao {
             ps.setString(7, contact.getAvatar());
             ps.setString(8, contact.getRemark());
             ps.setInt(9, contact.getId());
-            
+
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
@@ -216,9 +225,10 @@ public class ContactDao {
         }
         return false;
     }
-    
+
     /**
      * 删除联系人
+     *
      * @param id 联系人ID
      * @return 是否删除成功
      */
@@ -226,9 +236,9 @@ public class ContactDao {
         String sql = "DELETE FROM tbl_contact WHERE id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+
             ps.setInt(1, id);
-            
+
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {

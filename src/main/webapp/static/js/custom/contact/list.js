@@ -2,38 +2,38 @@
  * 联系人列表
  */
 
-$(document).ready(function() {
+$(document).ready(function () {
   // 加载联系人列表
   loadContactList();
-  
+
   // 搜索框输入事件
-  $('#searchInput').on('input', function() {
+  $('#searchInput').on('input', function () {
     debounce(loadContactList, 300)();
   });
-  
+
   // 重置按钮点击事件
-  $('#resetBtn').on('click', function() {
+  $('#resetBtn').on('click', function () {
     $('#searchInput').val('');
     loadContactList();
   });
-  
+
   // 删除按钮点击事件
-  $(document).on('click', '.delete-contact-btn', function() {
+  $(document).on('click', '.delete-contact-btn', function () {
     const contactId = $(this).data('id');
     const contactName = $(this).data('name');
-    
-    showConfirm(`确定要删除联系人 "${contactName}" 吗？此操作不可恢复。`, function() {
+
+    showConfirm(`确定要删除联系人 "${contactName}" 吗？此操作不可恢复。`, function () {
       deleteContact(contactId);
     }, '删除联系人');
   });
-  
+
   // 导出按钮点击事件
-  $('#exportBtn').on('click', function() {
+  $('#exportBtn').on('click', function () {
     exportContacts();
   });
-  
+
   // 导入按钮点击事件
-  $('#importBtn').on('click', function() {
+  $('#importBtn').on('click', function () {
     showImportModal();
   });
 });
@@ -61,21 +61,21 @@ function loadContactList() {
       </div>
     </div>
   `);
-  
+
   // 构造请求参数
   const params = {};
   const keyword = $('#searchInput').val().trim();
   if (keyword) {
     params.keyword = keyword;
   }
-  
+
   // 发送请求
   $.ajax({
     url: contextPath + '/api/contact/list',
     type: 'GET',
     data: params,
     dataType: 'json',
-    success: function(response) {
+    success: function (response) {
       if (response.success) {
         renderContactList(response.data);
       } else {
@@ -89,7 +89,7 @@ function loadContactList() {
         `);
       }
     },
-    error: function(xhr, status, error) {
+    error: function (xhr, status, error) {
       showErrorMessage('网络请求失败，请稍后重试');
       $('#contactListContainer').html(`
         <div class="empty-state">
@@ -117,20 +117,20 @@ function renderContactList(contacts) {
     `);
     return;
   }
-  
+
   let html = '';
   contacts.forEach(contact => {
+    let avatarHtml;
+    if (contact.avatar) {
+      avatarHtml = `<img src="${contextPath}/${contact.avatar}" alt="${contact.name}" class="rounded-circle border contact-avatar-img">`;
+    } else {
+      avatarHtml = `<div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center border contact-avatar-text">${contact.name.charAt(0).toUpperCase()}</div>`;
+    }
     html += `
       <div class="card shadow-sm mb-3">
         <div class="card-body">
           <div class="d-flex align-items-center">
-            <div class="me-3">
-              ${contact.avatar ? 
-                `<img src="${contextPath}/${contact.avatar}" alt="${contact.name}" class="rounded-circle border contact-avatar-img">` : 
-                `<div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center border contact-avatar-text">
-                  ${contact.name.charAt(0).toUpperCase()}
-                </div>`}
-            </div>
+            <div class="me-3">${avatarHtml}</div>
             <div class="flex-grow-1">
               <div class="fw-bold mb-1">${contact.name}</div>
               <div class="text-muted small mb-1">
@@ -163,7 +163,7 @@ function renderContactList(contacts) {
       </div>
     `;
   });
-  
+
   $('#contactListContainer').html(html);
 }
 
@@ -173,9 +173,9 @@ function deleteContact(contactId) {
   $.ajax({
     url: contextPath + '/api/contact/delete',
     type: 'POST',
-    data: { id: contactId },
+    data: {id: contactId},
     dataType: 'json',
-    success: function(response) {
+    success: function (response) {
       if (response.success) {
         showSuccessMessage(response.message);
         // 加载联系人列表
@@ -184,7 +184,7 @@ function deleteContact(contactId) {
         showErrorMessage(response.message || '删除联系人失败');
       }
     },
-    error: function(xhr, status, error) {
+    error: function (xhr, status, error) {
       showErrorMessage('网络请求失败，请稍后重试');
     }
   });
@@ -204,7 +204,7 @@ function exportContacts() {
     xhrFields: {
       responseType: 'blob'
     },
-    success: function(blob, status, xhr) {
+    success: function (blob, status, xhr) {
       // 创建下载链接
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -217,10 +217,10 @@ function exportContacts() {
 
       showSuccessMessage('导出成功');
     },
-    error: function(xhr, status, error) {
+    error: function (xhr, status, error) {
       showErrorMessage('导出失败，请稍后重试');
     },
-    complete: function() {
+    complete: function () {
       // 恢复按钮状态
       exportBtn.prop('disabled', false).html(originalText);
     }
@@ -268,7 +268,7 @@ function showImportModal() {
   modal.show();
 
   // 绑定导入提交事件
-  $('#importSubmitBtn').off('click').on('click', function() {
+  $('#importSubmitBtn').off('click').on('click', function () {
     importContacts();
   });
 }
@@ -306,7 +306,7 @@ function importContacts() {
     data: formData,
     processData: false,
     contentType: false,
-    success: function(response) {
+    success: function (response) {
       if (response.success) {
         showSuccessMessage(response.message || '导入成功');
 
@@ -320,10 +320,10 @@ function importContacts() {
         showErrorMessage(response.message || '导入失败');
       }
     },
-    error: function(xhr, status, error) {
+    error: function (xhr, status, error) {
       showErrorMessage('导入失败，请稍后重试');
     },
-    complete: function() {
+    complete: function () {
       // 恢复按钮状态
       importSubmitBtn.prop('disabled', false).text(originalText);
     }

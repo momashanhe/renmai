@@ -15,27 +15,27 @@
     <a class="navbar-brand" href="${pageContext.request.contextPath}/view/contact/list">
       <i class="fas fa-address-book me-2"></i>人脉
     </a>
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-    
+
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link ${param.active == 'contacts' ? 'active' : ''}" 
+          <a class="nav-link ${param.active == 'contacts' ? 'active' : ''}"
              href="${pageContext.request.contextPath}/view/contact/list">
             <i class="fas fa-users me-1"></i>联系人列表
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link ${param.active == 'add' ? 'active' : ''}" 
+          <a class="nav-link ${param.active == 'add' ? 'active' : ''}"
              href="${pageContext.request.contextPath}/view/contact/add">
             <i class="fas fa-user-plus me-1"></i>添加联系人
           </a>
         </li>
       </ul>
-      
+
       <ul class="navbar-nav">
         <c:if test="${not empty sessionScope.user}">
           <li class="nav-item dropdown">

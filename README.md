@@ -8,19 +8,19 @@
 
 ### 后端技术
 
-- **Java版本**: JDK 1.8
-- **构建工具**: Maven 3.6.0
-- **Web框架**: Servlet
-- **数据库**: MySQL 5.7.40
-- **数据访问**: JDBC
-- **JSON处理**: Jackson 2.9.1
+- Java版本: JDK 1.8
+- 构建工具: Maven 3.6.0
+- Web框架: Servlet
+- 数据库: MySQL 5.7.40
+- 数据访问: JDBC
+- JSON处理: Jackson 2.9.1
 
 ### 前端技术
 
-- **模板引擎**: JSP + JSTL
-- **UI框架**: Bootstrap 5.3.0
-- **JavaScript库**: jQuery 3.6.0
-- **交互方式**: AJAX异步请求
+- 模板引擎: JSP + JSTL
+- UI框架: Bootstrap 5.3.0
+- JavaScript库: jQuery 3.6.0
+- 交互方式: AJAX异步请求
 
 ## 项目结构
 
@@ -210,5 +210,6 @@ mvn clean package
 ## 测试账号
 
 数据库初始化脚本中包含以下测试账号：
+
 - 用户名：user
 - 密码：123456

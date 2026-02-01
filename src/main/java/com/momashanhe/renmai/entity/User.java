@@ -14,7 +14,8 @@ public class User {
     private Date updateTime;
 
     // 构造函数
-    public User() {}
+    public User() {
+    }
 
     public User(String username, String password, String email) {
         this.username = username;

@@ -16,7 +16,7 @@ import java.util.Map;
 public class BusinessUtil {
     // 用于JSON处理
     private static ObjectMapper objectMapper = new ObjectMapper();
-    
+
     /**
      * 发送JSON响应
      *
@@ -88,7 +88,7 @@ public class BusinessUtil {
         result.put("message", message);
         sendJsonResponse(response, result);
     }
-    
+
     /**
      * 检查用户是否已登录，如果用户未登录，重定向到登录页面
      *

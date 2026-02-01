@@ -11,20 +11,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 import java.util.Scanner;
+import java.util.UUID;
 
 /**
  * 联系人控制器，处理联系人相关操作
  */
 @WebServlet("/api/contact/*")
 @MultipartConfig(
-    fileSizeThreshold = 1024 * 1024 * 2,
-    maxFileSize = 1024 * 1024 * 10,
-    maxRequestSize = 1024 * 1024 * 50
+        fileSizeThreshold = 1024 * 1024 * 2,
+        maxFileSize = 1024 * 1024 * 10,
+        maxRequestSize = 1024 * 1024 * 50
 )
 public class ContactBusiness extends HttpServlet {
     private ContactDao contactDao = new ContactDao();
@@ -155,7 +159,7 @@ public class ContactBusiness extends HttpServlet {
             BusinessUtil.sendErrorResponse(response, "添加失败，电话不能为空");
             return;
         }
-        
+
         // 处理头像上传
         String avatarPath = null;
         Part avatarPart = request.getPart("avatarFile");
@@ -172,11 +176,11 @@ public class ContactBusiness extends HttpServlet {
                 if (!uploadDirFile.exists()) {
                     uploadDirFile.mkdirs();
                 }
-                
+
                 // 保存文件
                 String filePath = uploadDir + File.separator + uniqueFileName;
                 avatarPart.write(filePath);
-                
+
                 // 保存相对路径到数据库
                 avatarPath = "upload/avatar/" + uniqueFileName;
             }
@@ -249,11 +253,11 @@ public class ContactBusiness extends HttpServlet {
                 if (!uploadDirFile.exists()) {
                     uploadDirFile.mkdirs();
                 }
-                
+
                 // 保存文件
                 String filePath = uploadDir + File.separator + uniqueFileName;
                 avatarPart.write(filePath);
-                
+
                 // 保存相对路径到数据库
                 avatarPath = "upload/avatar/" + uniqueFileName;
             }
@@ -310,19 +314,19 @@ public class ContactBusiness extends HttpServlet {
             BusinessUtil.sendErrorResponse(response, "删除失败，请稍后重试");
         }
     }
-    
+
     /**
      * 导出联系人
      */
     private void exportContacts(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 查询所有联系人
         List<Contact> contacts = contactDao.listAll();
-        
+
         if (contacts == null) {
             BusinessUtil.sendErrorResponse(response, "导出失败，无法获取联系人数据");
             return;
         }
-        
+
         // 设置响应头
         response.setContentType("text/csv;charset=GBK");
         response.setHeader("Content-Disposition", "attachment; filename=联系人列表.csv");
@@ -332,7 +336,7 @@ public class ContactBusiness extends HttpServlet {
 
             // 写入头部
             writer.write("姓名,电话,邮箱,地址,公司,职位,备注\n");
-            
+
             // 写入数据
             for (Contact contact : contacts) {
                 writer.write(escapeField(contact.getName(), false) + "," +
@@ -350,7 +354,7 @@ public class ContactBusiness extends HttpServlet {
             BusinessUtil.sendErrorResponse(response, "导出失败，请稍后重试");
         }
     }
-    
+
     /**
      * 导入联系人
      */
@@ -362,16 +366,16 @@ public class ContactBusiness extends HttpServlet {
                 BusinessUtil.sendErrorResponse(response, "请选择要导入的文件");
                 return;
             }
-            
+
             // 读取内容
             InputStream inputStream = filePart.getInputStream();
             Scanner scanner = new Scanner(inputStream, "GBK");
-            
+
             // 读取并跳过头部
             if (scanner.hasNextLine()) {
                 scanner.nextLine();
             }
-            
+
             int importedCount = 0;
             int errorCount = 0;
 
@@ -379,7 +383,7 @@ public class ContactBusiness extends HttpServlet {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] fields = parseLine(line);
-                
+
                 if (fields.length >= 6) {
                     String name = fields[0].trim();
                     String phone = fields[1].trim();
@@ -405,18 +409,18 @@ public class ContactBusiness extends HttpServlet {
                     errorCount++;
                 }
             }
-            
+
             scanner.close();
-            
+
             String message = String.format("导入完成", importedCount, errorCount);
             BusinessUtil.sendSuccessResponse(response, message);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             BusinessUtil.sendErrorResponse(response, "导入失败，请检查格式是否正确");
         }
     }
-    
+
     /**
      * 转义字段
      */
@@ -424,7 +428,7 @@ public class ContactBusiness extends HttpServlet {
         if (field == null) {
             return "";
         }
-        
+
         // 如果字段包含特殊符号，则用双引号包围，并将双引号转义
         if (field.contains(",") || field.contains("\"") || field.contains("\n") || field.contains("\r")) {
             return "\"" + field.replace("\"", "\"\"") + "\"";
@@ -433,10 +437,10 @@ public class ContactBusiness extends HttpServlet {
         if (isNumber) {
             return field;
         }
-        
+
         return "\t" + field;
     }
-    
+
     /**
      * 解析行，处理转义字段
      */
@@ -444,10 +448,10 @@ public class ContactBusiness extends HttpServlet {
         java.util.List<String> fields = new java.util.ArrayList<>();
         StringBuilder currentField = new StringBuilder();
         boolean inQuotes = false;
-        
+
         for (int i = 0; i < line.length(); i++) {
             char c = line.charAt(i);
-            
+
             if (c == '"') {
                 // 检查是否是转义的引号
                 if (i + 1 < line.length() && line.charAt(i + 1) == '"') {
@@ -463,10 +467,10 @@ public class ContactBusiness extends HttpServlet {
                 currentField.append(c);
             }
         }
-        
+
         // 添加最后一个字段
         fields.add(currentField.toString());
-        
+
         return fields.toArray(new String[0]);
     }
 }
